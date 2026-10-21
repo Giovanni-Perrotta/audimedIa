@@ -3,11 +3,10 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { fileURLToPath, URL } from 'node:url';
 
-// Configuração da AudiMedIA
 export default defineConfig({
   plugins: [react()],
 
-  base: process.env.VITE_BASE_PATH || '/',
+  base: '/audimedla/',
 
   resolve: {
     alias: {
