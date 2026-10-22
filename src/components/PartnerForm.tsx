@@ -1,3 +1,4 @@
+
 import { useState, type FormEvent, type ChangeEvent } from 'react';
 import { Loader2, Send, CheckCircle2, AlertCircle } from 'lucide-react';
 import { validateEmail, validatePhone, type FieldError } from '@/utils/validation';
@@ -51,10 +52,12 @@ export function PartnerForm() {
   ) {
     const { name, value, type } = e.target;
     const checked = (e.target as HTMLInputElement).checked;
+
     setData((prev) => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
     }));
+
     if (errors[name]) {
       setErrors((prev) => {
         const next = { ...prev };
@@ -66,35 +69,86 @@ export function PartnerForm() {
 
   function validate(): boolean {
     const errs: FieldError = {};
+
     if (!data.name.trim()) errs.name = 'Informe seu nome.';
     if (!data.institution.trim()) errs.institution = 'Informe a instituição.';
     if (!data.role.trim()) errs.role = 'Informe seu cargo.';
+
     if (!data.email.trim()) {
       errs.email = 'Informe seu e-mail.';
     } else if (!validateEmail(data.email)) {
       errs.email = 'E-mail inválido.';
     }
+
     if (!data.phone.trim()) {
       errs.phone = 'Informe seu telefone.';
     } else if (!validatePhone(data.phone)) {
       errs.phone = 'Telefone inválido (use DDD + número).';
     }
-    if (!data.institutionType) errs.institutionType = 'Selecione o tipo de instituição.';
-    if (!data.interest) errs.interest = 'Selecione seu interesse.';
-    if (!data.consent) errs.consent = 'É necessário aceitar o consentimento LGPD.';
+
+    if (!data.institutionType) {
+      errs.institutionType = 'Selecione o tipo de instituição.';
+    }
+
+    if (!data.interest) {
+      errs.interest = 'Selecione seu interesse.';
+    }
+
+    if (!data.consent) {
+      errs.consent = 'É necessário aceitar o consentimento LGPD.';
+    }
+
     setErrors(errs);
     return Object.keys(errs).length === 0;
   }
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!validate()) return;
+
+    if (status === 'submitting' || !validate()) return;
+
     setStatus('submitting');
-    // Preparado para integração futura com serviço de formulários.
-    // Não simulamos envio bem-sucedido: exibimos mensagem transparente.
-    setTimeout(() => {
+
+    try {
+      const response = await fetch(
+        'https://formsubmit.co/ajax/regislegisassessoria@gmail.com',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify({
+            _subject: 'AudiMedIA - Novo interesse em parceria',
+            _replyto: data.email.trim(),
+            _template: 'table',
+            name: data.name.trim(),
+            institution: data.institution.trim(),
+            role: data.role.trim(),
+            email: data.email.trim(),
+            phone: data.phone.trim(),
+            institutionType: data.institutionType,
+            interest: data.interest,
+            message: data.message.trim() || 'Não informada',
+            consent: 'Sim - autorizou contato sobre testes-piloto',
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error('Falha na solicitação de envio.');
+      }
+
+      const result: { success?: boolean | string } = await response.json();
+
+      if (result.success !== true && result.success !== 'true') {
+        throw new Error('O serviço não confirmou o recebimento.');
+      }
+
+      setStatus('success');
+    } catch {
       setStatus('error');
-    }, 900);
+    }
   }
 
   if (status === 'success') {
@@ -102,10 +156,11 @@ export function PartnerForm() {
       <div className="flex flex-col items-center rounded-2xl border border-green-200 bg-green-50 p-10 text-center">
         <CheckCircle2 className="h-14 w-14 text-green-600" />
         <h3 className="mt-5 font-display text-xl font-semibold text-navy-700">
-          Recebemos seu interesse!
+          Solicitação registrada!
         </h3>
         <p className="mt-2 text-sm text-navy-400">
-          Em breve entraremos em contato pelo e-mail informado.
+          Obrigado pelo interesse na AudiMedIA. Nossa equipe entrará em contato
+          pelo e-mail informado.
         </p>
       </div>
     );
@@ -117,9 +172,8 @@ export function PartnerForm() {
         <div className="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
           <AlertCircle className="mt-0.5 h-5 w-5 shrink-0" />
           <p>
-            Ainda não configuramos o envio automático deste formulário. Por enquanto,
-            escreva diretamente para a equipe pelo formulário de contato — em breve a
-            integração estará ativa.
+            Não foi possível confirmar o envio. Tente novamente ou escreva
+            para regislegisassessoria@gmail.com.
           </p>
         </div>
       )}
@@ -134,6 +188,7 @@ export function PartnerForm() {
           placeholder="Seu nome"
           required
         />
+
         <Field
           label="Instituição"
           name="institution"
@@ -143,6 +198,7 @@ export function PartnerForm() {
           placeholder="Nome da instituição"
           required
         />
+
         <Field
           label="Cargo"
           name="role"
@@ -152,6 +208,7 @@ export function PartnerForm() {
           placeholder="Seu cargo"
           required
         />
+
         <Field
           label="E-mail"
           name="email"
@@ -162,6 +219,7 @@ export function PartnerForm() {
           placeholder="seu@email.com"
           required
         />
+
         <Field
           label="Telefone"
           name="phone"
@@ -172,6 +230,7 @@ export function PartnerForm() {
           placeholder="(11) 99999-9999"
           required
         />
+
         <SelectField
           label="Tipo de instituição"
           name="institutionType"
@@ -193,7 +252,6 @@ export function PartnerForm() {
         options={INTERESTS}
         placeholder="Selecione"
         required
-        full
       />
 
       <TextArea
@@ -212,17 +270,24 @@ export function PartnerForm() {
           onChange={handleChange}
           className="mt-0.5 h-5 w-5 shrink-0 rounded border-navy-300 text-brand-500 focus:ring-brand-400"
         />
+
         <span className="text-sm leading-relaxed text-navy-500">
           Autorizo o tratamento dos meus dados pessoais pela AudiMedIA, conforme a{' '}
-          <a href="#privacidade" className="font-medium text-brand-500 underline">
+          <a
+            href="#privacidade"
+            className="font-medium text-brand-500 underline"
+          >
             Política de Privacidade
           </a>{' '}
           e a Lei Geral de Proteção de Dados (LGPD), para fins de contato sobre os
           testes-piloto.
         </span>
       </label>
+
       {errors.consent && (
-        <p className="text-xs font-medium text-red-500">{errors.consent}</p>
+        <p className="text-xs font-medium text-red-500">
+          {errors.consent}
+        </p>
       )}
 
       <button
@@ -259,12 +324,26 @@ type FieldProps = {
   required?: boolean;
 };
 
-function Field({ label, name, value, onChange, type = 'text', placeholder, error, required }: FieldProps) {
+function Field({
+  label,
+  name,
+  value,
+  onChange,
+  type = 'text',
+  placeholder,
+  error,
+  required,
+}: FieldProps) {
   return (
     <div>
-      <label htmlFor={name} className="mb-1.5 block text-sm font-medium text-navy-700">
-        {label} {required && <span className="text-accent-500">*</span>}
+      <label
+        htmlFor={name}
+        className="mb-1.5 block text-sm font-medium text-navy-700"
+      >
+        {label}{' '}
+        {required && <span className="text-accent-500">*</span>}
       </label>
+
       <input
         id={name}
         name={name}
@@ -278,7 +357,12 @@ function Field({ label, name, value, onChange, type = 'text', placeholder, error
             : 'border-navy-200 focus:border-brand-400 focus:ring-brand-100'
         }`}
       />
-      {error && <p className="mt-1 text-xs font-medium text-red-500">{error}</p>}
+
+      {error && (
+        <p className="mt-1 text-xs font-medium text-red-500">
+          {error}
+        </p>
+      )}
     </div>
   );
 }
@@ -292,7 +376,6 @@ function SelectField({
   placeholder,
   error,
   required,
-  full,
 }: {
   label: string;
   name: string;
@@ -302,13 +385,17 @@ function SelectField({
   placeholder?: string;
   error?: string;
   required?: boolean;
-  full?: boolean;
 }) {
   return (
-    <div className={full ? '' : ''}>
-      <label htmlFor={name} className="mb-1.5 block text-sm font-medium text-navy-700">
-        {label} {required && <span className="text-accent-500">*</span>}
+    <div>
+      <label
+        htmlFor={name}
+        className="mb-1.5 block text-sm font-medium text-navy-700"
+      >
+        {label}{' '}
+        {required && <span className="text-accent-500">*</span>}
       </label>
+
       <select
         id={name}
         name={name}
@@ -323,13 +410,23 @@ function SelectField({
         <option value="" disabled>
           {placeholder}
         </option>
+
         {options.map((opt) => (
-          <option key={opt} value={opt} className="text-navy-700">
+          <option
+            key={opt}
+            value={opt}
+            className="text-navy-700"
+          >
             {opt}
           </option>
         ))}
       </select>
-      {error && <p className="mt-1 text-xs font-medium text-red-500">{error}</p>}
+
+      {error && (
+        <p className="mt-1 text-xs font-medium text-red-500">
+          {error}
+        </p>
+      )}
     </div>
   );
 }
@@ -349,9 +446,13 @@ function TextArea({
 }) {
   return (
     <div>
-      <label htmlFor={name} className="mb-1.5 block text-sm font-medium text-navy-700">
+      <label
+        htmlFor={name}
+        className="mb-1.5 block text-sm font-medium text-navy-700"
+      >
         {label}
       </label>
+
       <textarea
         id={name}
         name={name}
