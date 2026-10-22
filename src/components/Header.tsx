@@ -50,7 +50,7 @@ export function Header() {
           className="flex shrink-0 items-center"
         >
           <img
-            src={`${import.meta.env.BASE_URL}AudiMedIALogo.png`}
+            src={`${import.meta.env.BASE_URL}AudiMedIAlogo.png`}
             alt="AudiMedIA"
             className="h-14 w-auto max-w-[170px] object-contain sm:h-16 sm:max-w-[200px]"
           />
