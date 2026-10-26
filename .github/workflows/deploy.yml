@@ -1,4 +1,3 @@
-
 name: Publicar AudiMedIA
 
 on:
@@ -39,8 +38,6 @@ jobs:
 
       - name: Compilar AudiMedIA
         run: npm run build
-        env:
-          VITE_BASE_PATH: /audimedla/
 
       - name: Configurar GitHub Pages
         uses: actions/configure-pages@v5
