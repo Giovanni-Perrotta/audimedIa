@@ -27,12 +27,12 @@ export function Footer() {
               <img
                 src={`${import.meta.env.BASE_URL}logoRodapeTransparente.png`}
                 alt="AudiMedIA — Auditoria Inteligente de Contas Médicas"
-                className="h-auto w-full max-w-[270px] object-contain"
+                className="block h-[42px] w-auto max-w-full object-contain object-left"
                 loading="lazy"
               />
             </a>
 
-            <p className="mt-5 max-w-[280px] text-sm leading-relaxed text-navy-200">
+            <p className="mt-6 max-w-[280px] text-sm leading-relaxed text-navy-200">
               Healthtech em desenvolvimento dedicada à auditoria
               inteligente de contas médicas, prevenção de glosas,
               rastreabilidade de informações e eficiência hospitalar.
