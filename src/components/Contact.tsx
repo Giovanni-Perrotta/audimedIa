@@ -324,7 +324,20 @@ export function Contact() {
                       </p>
                     )}
                   </div>
-
+                  <p className="rounded-xl border border-navy-100 bg-navy-50 p-4 text-xs leading-relaxed text-navy-500">
+                    Ao enviar este formulário, você informa seus dados
+                    pessoais para que a AudiMedIA possa responder à sua
+                    solicitação de contato. Os dados serão tratados
+                    conforme nossa{' '}
+                    <a
+                      href="#privacidade"
+                      className="font-medium text-brand-500 underline hover:text-brand-600"
+                    >
+                      Política de Privacidade
+                    </a>
+                    . Não envie informações médicas ou dados sensíveis
+                    por este formulário.
+                  </p>
                   <button
                     type="submit"
                     disabled={status === 'submitting'}
