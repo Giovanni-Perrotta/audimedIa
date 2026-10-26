@@ -271,17 +271,19 @@ export function PartnerForm() {
           className="mt-0.5 h-5 w-5 shrink-0 rounded border-navy-300 text-brand-500 focus:ring-brand-400"
         />
 
-        <span className="text-sm leading-relaxed text-navy-500">
-          Autorizo o tratamento dos meus dados pessoais pela AudiMedIA, conforme a{' '}
-          <a
-            href="#privacidade"
-            className="font-medium text-brand-500 underline"
-          >
-            Política de Privacidade
-          </a>{' '}
-          e a Lei Geral de Proteção de Dados (LGPD), para fins de contato sobre os
-          testes-piloto.
-        </span>
+       <span className="text-sm leading-relaxed text-navy-500">
+  Li a{' '}
+  <a
+    href="#privacidade"
+    onClick={(e) => e.stopPropagation()}
+    className="font-medium text-brand-500 underline"
+  >
+    Política de Privacidade
+  </a>{' '}
+  e autorizo o tratamento dos meus dados pessoais
+  para que a AudiMedIA entre em contato comigo
+  sobre o interesse manifestado neste formulário.
+</span>
       </label>
 
       {errors.consent && (
