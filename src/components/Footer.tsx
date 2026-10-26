@@ -25,7 +25,7 @@ export function Footer() {
               className="inline-flex items-center"
             >
               <img
-                src={`${import.meta.env.BASE_URL}logoRodape.png`}
+                src={`${import.meta.env.BASE_URL}logoRodapeTransparente.png`}
                 alt="AudiMedIA — Auditoria Inteligente de Contas Médicas"
                 className="h-auto w-full max-w-[270px] object-contain"
                 loading="lazy"
