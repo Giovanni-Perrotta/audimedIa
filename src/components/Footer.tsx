@@ -27,7 +27,7 @@ export function Footer() {
               <img
                 src={`${import.meta.env.BASE_URL}logoRodapeTransparente.png`}
                 alt="AudiMedIA — Auditoria Inteligente de Contas Médicas"
-                className="block h-[42px] w-auto max-w-full object-contain object-left"
+                className="block h-[70px] w-[270px] max-w-full object-contain object-left"
                 loading="lazy"
               />
             </a>
