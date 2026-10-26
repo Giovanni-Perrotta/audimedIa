@@ -1,24 +1,22 @@
-import { NAV_LINKS } from '@/constants/nav';
-
-const FOOTER_LINKS = NAV_LINKS.filter(
-  (link) =>
-    !(
-      link.href === '#parceiro' ||
-      link.href === '#parceiros' ||
-      /parceir/i.test(link.label)
-    ),
-);
+const FOOTER_NAV = [
+  { label: 'Início', href: '#inicio' },
+  { label: 'Sobre', href: '#sobre' },
+  { label: 'Soluções', href: '#solucoes' },
+  { label: 'Tecnologia', href: '#tecnologia' },
+  { label: 'MVP', href: '#mvp' },
+  { label: 'Seja parceiro', href: '#parceiro' },
+];
 
 export function Footer() {
   return (
     <footer className="border-t border-navy-800 bg-navy-700 pt-14 pb-8 text-navy-100">
       <div className="container-page">
 
-        <div className="grid gap-10 lg:grid-cols-4 lg:gap-8">
+        {/* RODAPÉ PRINCIPAL — 3 COLUNAS */}
+        <div className="grid gap-10 md:grid-cols-3 md:gap-12">
 
-          {/* IDENTIDADE VISUAL AUDIMEDIA */}
-          <div className="lg:col-span-1">
-
+          {/* COLUNA 1 — IDENTIDADE VISUAL */}
+          <div>
             <a
               href="#inicio"
               aria-label="AudiMedIA — Voltar ao início"
@@ -37,18 +35,16 @@ export function Footer() {
               inteligente de contas médicas, prevenção de glosas,
               rastreabilidade de informações e eficiência hospitalar.
             </p>
-
           </div>
 
-          {/* NAVEGAÇÃO */}
+          {/* COLUNA 2 — NAVEGAÇÃO */}
           <div>
-
             <p className="font-display text-sm font-semibold uppercase tracking-wider text-accent-300">
               Navegação
             </p>
 
             <ul className="mt-4 space-y-2.5">
-              {FOOTER_LINKS.map((link) => (
+              {FOOTER_NAV.map((link) => (
                 <li key={link.href}>
                   <a
                     href={link.href}
@@ -59,76 +55,15 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-
           </div>
 
-          {/* A SOLUÇÃO */}
+          {/* COLUNA 3 — INFORMAÇÕES */}
           <div>
-
             <p className="font-display text-sm font-semibold uppercase tracking-wider text-accent-300">
-              A solução
+              Informações
             </p>
 
             <ul className="mt-4 space-y-2.5">
-
-              <li>
-                <a
-                  href="#solucoes"
-                  className="text-sm text-navy-200 transition-colors hover:text-white"
-                >
-                  Auditoria de contas
-                </a>
-              </li>
-
-              <li>
-                <a
-                  href="#solucoes"
-                  className="text-sm text-navy-200 transition-colors hover:text-white"
-                >
-                  Prevenção de glosas
-                </a>
-              </li>
-
-              <li>
-                <a
-                  href="#tecnologia"
-                  className="text-sm text-navy-200 transition-colors hover:text-white"
-                >
-                  Tecnologia
-                </a>
-              </li>
-
-              <li>
-                <a
-                  href="#mvp"
-                  className="text-sm text-navy-200 transition-colors hover:text-white"
-                >
-                  Status do MVP
-                </a>
-              </li>
-
-              <li>
-                <a
-                  href="#parceiro"
-                  className="text-sm text-navy-200 transition-colors hover:text-white"
-                >
-                  Seja parceiro
-                </a>
-              </li>
-
-            </ul>
-
-          </div>
-
-          {/* INFORMAÇÕES LEGAIS */}
-          <div>
-
-            <p className="font-display text-sm font-semibold uppercase tracking-wider text-accent-300">
-              Legal
-            </p>
-
-            <ul className="mt-4 space-y-2.5">
-
               <li>
                 <a
                   href="#privacidade"
@@ -143,23 +78,10 @@ export function Footer() {
                   href="#contato"
                   className="text-sm text-navy-200 transition-colors hover:text-white"
                 >
-                  Fale conosco
+                  Contato
                 </a>
               </li>
-
             </ul>
-
-            <div className="mt-6 rounded-xl border-l-4 border-accent-400 bg-white/5 p-4">
-
-              <p className="text-xs leading-relaxed text-navy-200">
-                Projeto em fase de desenvolvimento e validação.
-                As informações apresentadas neste site possuem
-                caráter institucional e não constituem oferta
-                comercial de produto.
-              </p>
-
-            </div>
-
           </div>
 
         </div>
